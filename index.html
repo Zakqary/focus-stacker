@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Focus Stacker</title>
+  <meta name="description" content="Combine photos taken at different focus depths into one sharp image. Runs entirely in your browser; photos are never uploaded.">
+  <meta name="theme-color" content="#1d2433">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <h1><img src="icon.svg" alt="" width="28" height="28"> Focus Stacker</h1>
+      <p>Combine photos taken at different focus depths into one sharp image.
+        Everything runs on your device. Your photos are never uploaded.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div id="notice" class="notice" hidden></div>
+
+    <section class="card" id="pick">
+      <div id="drop" class="drop">
+        <p class="drop-title">Add a stack of photos</p>
+        <p class="hint" id="drop-hint">Pick all the photos of one subject, from the nearest focus to the farthest.</p>
+        <div class="buttons">
+          <label class="btn primary">
+            Choose photos
+            <input type="file" id="in-files" accept="image/*" multiple hidden>
+          </label>
+          <label class="btn" id="folder-btn" hidden>
+            Choose a folder
+            <input type="file" id="in-folder" webkitdirectory multiple hidden>
+          </label>
+        </div>
+      </div>
+
+      <div id="stacks" class="stacks" hidden>
+        <ul id="stack-list"></ul>
+        <div class="row">
+          <label class="inline">Order by
+            <select id="order">
+              <option value="name">File name</option>
+              <option value="time">File date</option>
+              <option value="pick">Order picked</option>
+            </select>
+          </label>
+          <button type="button" class="link" id="clear">Clear</button>
+        </div>
+      </div>
+    </section>
+
+    <details class="card" id="settings">
+      <summary>Settings</summary>
+      <div class="settings">
+        <fieldset>
+          <legend>Methods</legend>
+          <label><input type="checkbox" id="o-pyramid" checked> Pyramid <span class="hint">sharpest fine detail</span></label>
+          <label><input type="checkbox" id="o-depthmap" checked> Depth map <span class="hint">cleaner colours and tones</span></label>
+          <label><input type="checkbox" id="o-depth" checked> Save depth image <span class="hint">shows which photo was used where</span></label>
+        </fieldset>
+        <fieldset>
+          <legend>Processing</legend>
+          <label><input type="checkbox" id="o-align" checked> Align photos <span class="hint">corrects small shifts between shots</span></label>
+          <label><input type="checkbox" id="o-crop" checked> Crop edges <span class="hint">removes borders left by alignment</span></label>
+          <label class="inline">Working size
+            <select id="o-size"></select>
+          </label>
+          <p class="hint">Smaller is faster and uses less memory. Phones may need a smaller size for big photos.</p>
+          <label class="inline">Save as
+            <select id="o-format">
+              <option value="image/jpeg">JPEG</option>
+              <option value="image/png">PNG (larger, lossless)</option>
+            </select>
+          </label>
+        </fieldset>
+        <fieldset>
+          <legend>Fine-tuning</legend>
+          <label class="slider">Pyramid selectivity <output id="v-sharp"></output>
+            <input type="range" id="o-sharp" min="1" max="12" step="0.5" value="6">
+            <span class="hint">Higher is crisper; lower is smoother with less noise.</span>
+          </label>
+          <label class="slider">Depth-map smoothing <output id="v-smooth"></output>
+            <input type="range" id="o-smooth" min="0.5" max="8" step="0.5" value="2">
+            <span class="hint">Higher gives fewer artefacts in smooth areas but softer edges.</span>
+          </label>
+          <button type="button" class="link" id="reset">Reset to defaults</button>
+        </fieldset>
+      </div>
+    </details>
+
+    <section class="card run">
+      <button type="button" class="btn primary big" id="go" disabled>Stack photos</button>
+      <div id="status" class="status" hidden>
+        <div class="bar"><div id="bar-fill"></div></div>
+        <p id="status-text" aria-live="polite"></p>
+        <button type="button" class="link" id="cancel">Cancel</button>
+      </div>
+      <p class="hint" id="keep-open" hidden>Keep this page open and the screen on until it finishes.</p>
+    </section>
+
+    <section id="results"></section>
+
+    <details class="card help">
+      <summary>Tips for good stacks</summary>
+      <ul>
+        <li>Keep the camera and subject still; change only the focus between shots.</li>
+        <li>Take enough photos that every part of the subject is sharp in at least one of them, usually 5 to 20.</li>
+        <li>Keep exposure and white balance the same for every shot if your camera allows it.</li>
+        <li>The photos must be in focus order. Sorting by file name usually gets this right; if the result looks odd, try “Order by → File date”.</li>
+        <li><strong>Pyramid</strong> is best for hairs, bristles and fine texture. <strong>Depth map</strong> keeps colours cleaner. You can make both and keep whichever looks better.</li>
+        <li>On a computer you can drag photos, or several folders at once (one stack per folder), onto the page.</li>
+      </ul>
+    </details>
+  </main>
+
+  <footer class="wrap foot">
+    <p>Free to use, no account needed. Your photos stay on your device.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
